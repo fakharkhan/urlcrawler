@@ -1,11 +1,15 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/react-starter-kit",
+    "name": "fakharkhan/crawlmark",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Scrape URLs to markdown with Firecrawl. Crawl and save web pages as documents.",
     "keywords": [
         "laravel",
-        "framework"
+        "url",
+        "crawl",
+        "scraper",
+        "markdown",
+        "firecrawl"
     ],
     "license": "MIT",
     "require": {
