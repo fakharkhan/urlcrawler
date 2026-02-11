@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ScrapedDocumentController;
+use App\Models\ScrapedDocument;
+use App\Models\Url;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -12,7 +14,27 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('dashboard', function () {
-    return Inertia::render('dashboard');
+    $stats = [
+        'urls_count' => Url::count(),
+        'documents_count' => ScrapedDocument::count(),
+    ];
+
+    $recentDocuments = ScrapedDocument::query()
+        ->with('url')
+        ->latest()
+        ->limit(8)
+        ->get()
+        ->map(fn (ScrapedDocument $doc) => [
+            'id' => $doc->id,
+            'url' => $doc->url->url,
+            'title' => $doc->title,
+            'created_at' => $doc->created_at->toISOString(),
+        ]);
+
+    return Inertia::render('dashboard', [
+        'stats' => $stats,
+        'recentDocuments' => $recentDocuments,
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->prefix('documents')->name('documents.')->group(function () {
